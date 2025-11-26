@@ -34,15 +34,34 @@ const navItem = [
 export const Navbar = () => {
   const [hovered, setHovered] = useState<number | null>(null);
 
+  const [shadow, setShadow] = useState<boolean>(false);
+
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    console.log(latest);
+    // useMotionValueEvent jo hai wo like teen chize ati hai okh!..
+    // first one is scrollY, "chnages"(string), and callBack ek and latest ko compare karnge okh!..
+    if (latest > 20) {
+      setShadow(true);
+    } else {
+      setShadow(false);
+    }
   });
 
   return (
     <Container className="rounded-full">
-      <nav className="m-2 flex items-center justify-between p-2 lg:m-3">
+      <motion.nav
+        animate={{
+          boxShadow: shadow ? "shadow-2xl" : "none",
+          width: shadow ? "50%" : "100%",
+          y: shadow ? 10 : 0,
+        }}
+        transition={{
+          duration: 0.3,
+          ease: "linear",
+        }}
+        className="fixed inset-x-0 top-0 z-50 m-2 flex max-w-4xl items-center justify-between p-2 lg:m-3"
+      >
         <div className="ml-4 rounded-full">
           <Image
             src={"/@techy-Prey.jpg"}
@@ -74,7 +93,7 @@ export const Navbar = () => {
             </Link>
           ))}
         </div>
-      </nav>
+      </motion.nav>
     </Container>
   );
 };
