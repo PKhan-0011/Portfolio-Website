@@ -1,101 +1,78 @@
+// isme hai abhi kuch dikkat isko fix kario subha okkh!..
 "use client";
-
+import React, { useState } from "react";
 import { Container } from "@/components/container";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sun } from "lucide-react";
-import { motion, useMotionValueEvent, useScroll } from "motion/react";
-import { useState } from "react";
 
-const navItem = [
+import { motion } from "motion/react";
+
+export const navItems = [
   {
-    id: 1,
     title: "About",
-    link: "/about",
+    href: "/about",
   },
   {
-    id: 2,
     title: "Projects",
-    link: "/project",
+    href: "/project",
   },
   {
-    id: 3,
     title: "Contact",
-    link: "/contact",
+    href: "/contact",
   },
   {
-    id: 4,
     title: "Blog",
-    link: "/blog",
+    href: "/blog",
   },
 ];
 
-export const Navbar = () => {
-  const [hovered, setHovered] = useState<number | null>(null);
+const Navbar = () => {
+  // Yha p like useState s mai dark and light mode bna dunga okkh!
 
-  const [shadow, setShadow] = useState<boolean>(false);
-
-  const { scrollY } = useScroll();
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    // useMotionValueEvent jo hai wo like teen chize ati hai okh!..
-    // first one is scrollY, "chnages"(string), and callBack ek and latest ko compare karnge okh!..
-    if (latest > 20) {
-      setShadow(true);
-    } else {
-      setShadow(false);
-    }
-  });
+  const [hovered, setHovered] = useState<string | null>(null);
 
   return (
-    <Container className="rounded-full">
-      <motion.nav
-        animate={{
-          boxShadow: shadow ? "shadow-2xl" : "none",
-          width: shadow ? "50%" : "100%",
-          y: shadow ? 10 : 0,
-        }}
-        transition={{
-          duration: 0.3,
-          ease: "linear",
-        }}
-        className="fixed inset-x-0 top-0 z-50 m-2 flex max-w-4xl items-center justify-between p-2 lg:m-3"
-      >
-        <div className="ml-4 rounded-full">
-          <Image
-            src={"/@techy-Prey.jpg"}
-            alt="#khudkiImage"
-            height={40}
-            width={40}
-            className="rounded-full border border-black"
-          />
-        </div>
-        <div className="mr-10 flex items-center gap-4">
-          <Button>
-            <Sun />
+    <Container className="mx-auto max-w-3xl rounded-full">
+      <nav className="m-2 flex items-center justify-between rounded-full p-3">
+        <Image
+          src="/@techy-Prey.jpg"
+          alt="#apniImage"
+          height={30}
+          width={30}
+          className="rounded-full"
+        />
+
+        <div className="flex items-center gap-4">
+          <Button variant="ghost">
+            {" "}
+            <Sun />{" "}
           </Button>
-          {navItem.map((index) => (
+          {navItems.map((items) => (
             <Link
-              key={index.id}
-              href={index.link}
-              onMouseEnter={() => setHovered(index.id)}
+              href={items.href}
+              key={items.title}
+              className="text-secondary relative text-sm font-semibold"
+              onMouseEnter={() => setHovered(items.title)}
               onMouseLeave={() => setHovered(null)}
-              className="relative px-2 py-1 text-sm"
             >
-              {hovered === index.id && (
+              {hovered === items.title && (
                 <motion.span
                   layoutId="hovered-span"
-                  className="absolute inset-0 z-0 h-full w-full rounded-full bg-neutral-200 dark:bg-neutral-800"
-                ></motion.span>
+                  className="dark-bg-neutral-800 absolute inset-0 z-4 h-full w-full overflow-hidden rounded-md bg-neutral-200 p-3 px-4"
+                />
               )}
-              <span className="relative z-10">{index.title}</span>
+              <motion.span className="relative z-20">
+                {" "}
+                {items.title}
+              </motion.span>
             </Link>
           ))}
         </div>
-      </motion.nav>
+      </nav>
     </Container>
   );
 };
 
-// isme hai abhi kuch dikkat isko fix kario subha okkh!..
+export default Navbar;
